@@ -1,3 +1,7 @@
+# set android version.
+ARG ANDROID_BUILD_TOOL_VERSION="build-tools;28.0.2"
+ARG ANDROID_PLATFORM_VERSION="platforms;android-28"
+
 FROM ubuntu:16.04
 
 # install sudo
@@ -27,19 +31,19 @@ RUN sudo apt-get -y install wget \
   && rm -rf sdk-tools-linux-4333796.zip
 
 # set env.
-ENV GRADLE_HOME=/usr/local/gradle-4.6
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV ANDROID_HOME /usr/local/
+
+ENV PATH /usr/local/gradle-4.6/bin:$PATH
+ENV PATH /usr/local/tools/bin:$PATH
 ENV PATH $ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH
 
-# gradle setup.
-RUN /usr/local/gradle-4.6/bin/gradle -v
-
 # download sdk.
-RUN (while sleep 3; do echo "y"; done) | /usr/local/tools/bin/sdkmanager --update
-RUN (while sleep 3; do echo "y"; done) | /usr/local/tools/bin/sdkmanager "build-tools;28.0.2"
-RUN (while sleep 3; do echo "y"; done) | /usr/local/tools/bin/sdkmanager "platform-tools" "platforms;android-28"
+RUN (while sleep 3; do echo "y"; done) | sdkmanager --update
+RUN (while sleep 3; do echo "y"; done) | sdkmanager ${ANDROID_BUILD_TOOL_VERSION}
+RUN (while sleep 3; do echo "y"; done) | sdkmanager "platform-tools" ${ANDROID_PLATFORM_VERSION}
 
 
-ENTRYPOINT cd home/URLSchemePluginProject/urlschemeplugin && /usr/local/gradle-4.6/bin/gradle assemble
+# gradleのキャッシュ作りたいがどうするのがいいんだろう。
+ENTRYPOINT cd home/$PROJECT/$PLUGIN && gradle assemble
 

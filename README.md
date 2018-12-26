@@ -4,12 +4,20 @@ CO2 is Android Plugin build tool for Unity.
 
 ## usage
 
-locate module-contained android project into build folder,  
-then run build.sh.
+locate android module into project/ModuleContainedProject folder,  
+then run 
+
+	sh build.sh
 
 
 
 ## example
 
-this build folder contains zipped example project.  
-unzip it and run build.sh will generate Android plugin .aar file into build/URLSchemePluginProject/urlschemeplugin/output folder.
+this "project" folder contains the base project(ModuleContainedProject).  
+current build target module is, "urlschemeplugin" module inside the ModuleContainedProject folder.
+
+run 
+
+	sh build.sh 
+
+will generate Android plugin .aar file into the "project" folder.

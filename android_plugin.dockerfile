@@ -45,5 +45,5 @@ RUN (while sleep 3; do echo "y"; done) | sdkmanager "platform-tools" ${ANDROID_P
 
 
 # gradleのキャッシュ作りたいがどうするのがいいんだろう。
-ENTRYPOINT cd home/$PROJECT/$PLUGIN && gradle assemble
+ENTRYPOINT cd home/$PROJECT/$PLUGIN && gradle assemble && cp build/outputs/aar/$PLUGIN-release.aar /home/$PLUGIN.aar
 

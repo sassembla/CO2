@@ -32,18 +32,20 @@ RUN sudo apt-get -y install wget \
 
 # set env.
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
-ENV ANDROID_HOME /usr/local/
+ENV ANDROID_HOME /usr/local
 
 ENV PATH /usr/local/gradle-4.6/bin:$PATH
 ENV PATH /usr/local/tools/bin:$PATH
 ENV PATH $ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH
 
-# download sdk.
 RUN (while sleep 3; do echo "y"; done) | sdkmanager --update
 RUN (while sleep 3; do echo "y"; done) | sdkmanager ${ANDROID_BUILD_TOOL_VERSION}
-RUN (while sleep 3; do echo "y"; done) | sdkmanager "platform-tools" ${ANDROID_PLATFORM_VERSION}
+RUN (while sleep 3; do echo "y"; done) | sdkmanager "platform-tools" ${ANDROID_BUILD_TOOL_VERSION}
 
+ARG PLUGIN
+COPY project/$PLUGIN home/$PLUGIN
 
-# gradleのキャッシュ作りたいがどうするのがいいんだろう。
-ENTRYPOINT cd home/ModuleContainedProject/$PLUGIN && gradle assemble && cp build/outputs/aar/$PLUGIN-release.aar /home/$PLUGIN.aar
+RUN cd home/urlschemeplugin && gradle extractDebugAnnotations
+
+ENTRYPOINT cd home/$PLUGIN && gradle assemble && cp build/outputs/aar/$PLUGIN-release.aar /home/output
 

@@ -1,3 +1,9 @@
+if [ "$1" = "" ]
+then
+    echo "please set project(module) name."
+    exit
+fi
+
 mkdir -p project
 mkdir -p output
 

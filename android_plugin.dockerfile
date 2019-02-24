@@ -45,7 +45,7 @@ RUN (while sleep 3; do echo "y"; done) | sdkmanager "platform-tools" ${ANDROID_B
 ARG PLUGIN
 COPY project/$PLUGIN home/$PLUGIN
 
-RUN cd home/urlschemeplugin && gradle extractDebugAnnotations
+RUN cd home/$PLUGIN && gradle extractDebugAnnotations
 
 ENTRYPOINT cd home/$PLUGIN && gradle assemble && cp build/outputs/aar/$PLUGIN-release.aar /home/output
 
